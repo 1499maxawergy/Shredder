@@ -29,7 +29,7 @@ class Shredder:
             return False
 
     #Затирка файла (восстановить нельзя)
-    def wipe_file(self, path=None, level=1):
+    def wipe_file(self, path=None, level=2):
         try:
             valid_chars = string.ascii_letters + string.digits
             filesize = os.path.getsize(path)
@@ -54,10 +54,21 @@ class Shredder:
                 os.remove(path)
                 return True
             else:
-                return False
+                self.delete_file(path=path)
+                return True
         except Exception:
             return False
 
-
-    def wipe_multiple(self, path=None):
-        pass
+# Вайп всего, что лежит в папке
+    def wipe_multiple(self, path=None, level=2):
+        try:
+            if os.path.isdir(path):
+                for elem in os.listdir(path=path):
+                    print('Deleting: ' + str(path) + '/' + str(elem))
+                    self.wipe_multiple(path=str(path) + '/' + str(elem))
+                os.rmdir(path=path)
+            else:
+                self.wipe_file(path=path, level=level)
+            return True
+        except Exception:
+            return False
