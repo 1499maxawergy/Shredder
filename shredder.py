@@ -22,3 +22,7 @@ class Shredder:
             return True
         except Exception:
             return False
+
+    
+    def wipe_file(self, path=None):
+        pass
