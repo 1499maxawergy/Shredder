@@ -4,18 +4,27 @@ import random
 
 class Shredder:
 
-    slash = '/'
+    slash = '/' # Дефолтный слэш в вашей системе (иногда требует \\)
 
-    #Удаление файла без затирки (можно восстановить)
     def delete_file(self, path=None):
+        """
+        Удаление файла без затирки
+        При таком удалении файл можно восстановить
+        path - Путь до файла (по умолчанию: None)
+        """
         try:
             os.remove(path=path)
             return True
         except Exception:
             return False
     
-    #Удаление директории и файлов без затирки (можно восстановить)
     def delete_muptiple(self, path=None):
+        """
+        Удаление и файла, и директории рекурсивно
+        Является производной от метода delete_file()
+        path - Путь до файла/директории (по умолчанию: None)
+        Если указана директория, то удаляется все, что в ней есть, и она сама
+        """
         try:
             if os.path.isdir(path):
                 for elem in os.listdir(path=path):
@@ -30,6 +39,11 @@ class Shredder:
 
     #Затирка файла (восстановить нельзя)
     def wipe_file(self, path=None, level=2):
+        """
+        Затирка с последующим переименованием файла
+        path - Путь до файла (по умолчанию: None)
+        level - Уровень затирки (сколько раз файл будет перезатираться) (по умолчанию: 2)
+        """
         try:
             valid_chars = string.ascii_letters + string.digits
             filesize = os.path.getsize(path)
@@ -59,8 +73,14 @@ class Shredder:
         except Exception:
             return False
 
-# Вайп всего, что лежит в папке
     def wipe_multiple(self, path=None, level=2):
+        """
+        Затирка с последующим переименованием файлов в папке
+        Является производной от метода wipe_file()
+        path - Путь до файла (по умолчанию: None)
+        level - Уровень затирки (сколько раз файл будет перезатираться) (по умолчанию: 2)
+        Примечание: в конце метода сама папка просто удаляется, так как затирать в ней будет нечего
+        """
         try:
             if os.path.isdir(path):
                 for elem in os.listdir(path=path):
